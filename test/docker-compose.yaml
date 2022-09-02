@@ -1,0 +1,51 @@
+version: "3.2"
+
+services:
+  mysql:
+    build:
+      context: mysql/
+      args:
+        MYSQL_VERSION: $MYSQL_VERSION
+    volumes:
+      - type: bind
+        source: ./mysql/config/mysql.cnf
+        target: /etc/mysql/conf.d/my.cnf
+        read_only: true
+      
+      - type: bind
+        source: ./mysql/sql
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      
+      - type: volume
+        source: mysql
+        target: /var/lib/mysql
+    ports:
+      - "3306:3306"
+   
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: books_authors
+      MYSQL_USER: omar
+      MYSQL_PASSWORD: 12345
+    networks:
+      - mysql-elk
+
+  test: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    container_name: test
+    image: test
+    networks:
+      - mysql-elk
+    ports:
+      - '3000:3000'
+
+networks:
+  mysql-elk:
+    driver: bridge
+
+volumes:
+  mysql:

@@ -1,0 +1,10 @@
+typing==3.5.0
+PyQt5==5.15.5
+python-dateutil==2.8.2
+Flask==2.0.2
+Flask-MySQLdb==0.2.0
+pymisp==2.4.148.1
+argparse==1.4.0
+pathlib==1.0.1
+geocoder==1.38.1
+folium==0.12.1
